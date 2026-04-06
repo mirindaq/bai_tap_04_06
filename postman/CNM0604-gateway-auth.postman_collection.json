@@ -1,0 +1,164 @@
+﻿{
+    "info":  {
+                 "_postman_id":  "d2a8f2bb-2d5b-4ef6-bd42-92be8d9f4e11",
+                 "name":  "CNM0604 - Gateway Auth Flow",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "item":  [
+                 {
+                     "name":  "Health - Gateway",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+
+                                                ],
+                                     "url":  {
+                                                 "raw":  "{{baseUrl}}/actuator/health",
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "path":  [
+                                                              "actuator",
+                                                              "health"
+                                                          ]
+                                             }
+                                 }
+                 },
+                 {
+                     "name":  "Register",
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ],
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"fullName\": \"{{fullName}}\"\n}"
+                                              },
+                                     "url":  {
+                                                 "raw":  "{{baseUrl}}/api-gateway/customer-service/api/v1/auth/register",
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "path":  [
+                                                              "api-gateway",
+                                                              "customer-service",
+                                                              "api",
+                                                              "v1",
+                                                              "auth",
+                                                              "register"
+                                                          ]
+                                             }
+                                 }
+                 },
+                 {
+                     "name":  "Login",
+                     "event":  [
+                                   {
+                                       "listen":  "test",
+                                       "script":  {
+                                                      "type":  "text/javascript",
+                                                      "exec":  [
+                                                                   "pm.test(\u0027Status code is 200\u0027, function () {",
+                                                                   "  pm.response.to.have.status(200);",
+                                                                   "});",
+                                                                   "",
+                                                                   "const json = pm.response.json();",
+                                                                   "const token = json?.data?.accessToken;",
+                                                                   "if (token) {",
+                                                                   "  pm.collectionVariables.set(\u0027accessToken\u0027, token);",
+                                                                   "}"
+                                                               ]
+                                                  }
+                                   }
+                               ],
+                     "request":  {
+                                     "method":  "POST",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ],
+                                     "body":  {
+                                                  "mode":  "raw",
+                                                  "raw":  "{\n  \"login\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+                                              },
+                                     "url":  {
+                                                 "raw":  "{{baseUrl}}/api-gateway/customer-service/api/v1/auth/login",
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "path":  [
+                                                              "api-gateway",
+                                                              "customer-service",
+                                                              "api",
+                                                              "v1",
+                                                              "auth",
+                                                              "login"
+                                                          ]
+                                             }
+                                 }
+                 },
+                 {
+                     "name":  "Get Customer By Id (Protected)",
+                     "request":  {
+                                     "method":  "GET",
+                                     "header":  [
+                                                    {
+                                                        "key":  "Authorization",
+                                                        "value":  "Bearer {{accessToken}}"
+                                                    }
+                                                ],
+                                     "url":  {
+                                                 "raw":  "{{baseUrl}}/api-gateway/customer-service/api/v1/customers/{{customerId}}",
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "path":  [
+                                                              "api-gateway",
+                                                              "customer-service",
+                                                              "api",
+                                                              "v1",
+                                                              "customers",
+                                                              "{{customerId}}"
+                                                          ]
+                                             },
+                                     "description":  "Can Bearer token. Lay customer theo id de order-service goi OpenFeign."
+                                 }
+                 }
+             ],
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "http://localhost:8088"
+                     },
+                     {
+                         "key":  "username",
+                         "value":  "testuser01"
+                     },
+                     {
+                         "key":  "email",
+                         "value":  "testuser01@example.com"
+                     },
+                     {
+                         "key":  "password",
+                         "value":  "123456"
+                     },
+                     {
+                         "key":  "fullName",
+                         "value":  "Test User"
+                     },
+                     {
+                         "key":  "accessToken",
+                         "value":  ""
+                     },
+                     {
+                         "key":  "customerId",
+                         "value":  "1"
+                     }
+                 ]
+}

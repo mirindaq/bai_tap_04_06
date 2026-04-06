@@ -1,14 +1,16 @@
 server:
   port: 8082
+  servlet:
+    context-path: /customer-service
 
 spring:
   application:
     name: customer-service
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/customer_db
+    url: jdbc:mariadb://localhost:3307/customer_db
     username: root
-    password: 123456
+    password: viethoang123
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
@@ -19,7 +21,20 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
 
+api:
+  prefix: /api/v1
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:change-me-to-a-long-random-secret-key-at-least-32-chars}
+      access-token-expiration-seconds: ${JWT_ACCESS_TOKEN_EXPIRATION_SECONDS:3600}
+
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

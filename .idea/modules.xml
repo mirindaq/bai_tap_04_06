@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/bai_tap_04_06.iml" filepath="$PROJECT_DIR$/.idea/bai_tap_04_06.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/CNM0604.iml" filepath="$PROJECT_DIR$/.idea/CNM0604.iml" />
+>>>>>>> d9361643c855f43b5e232eb3d6ce40a6ae2d4c79
     </modules>
   </component>
 </project>
