@@ -8,9 +8,9 @@ spring:
     name: product-service
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/product_db
+    url: jdbc:mariadb://localhost:3307/product_db
     username: root
-    password: sapassword
+    password: 123456
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
