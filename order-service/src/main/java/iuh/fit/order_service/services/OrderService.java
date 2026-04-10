@@ -12,17 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 import feign.FeignException;
 import iuh.fit.order_service.exception.NotFoundException;
 import iuh.fit.order_service.clients.CustomerFeignClient;
-import iuh.fit.order_service.clients.PaymentFeignClient;
 import iuh.fit.order_service.clients.ProductFeignClient;
 import iuh.fit.order_service.dtos.request.CreateOrderRequest;
 import iuh.fit.order_service.dtos.request.OrderLineRequest;
-import iuh.fit.order_service.dtos.request.PaymentTriggerRequest;
 import iuh.fit.order_service.dtos.request.UpdatePaymentStatusRequest;
 import iuh.fit.order_service.dtos.response.OrderDetailResponse;
 import iuh.fit.order_service.dtos.response.OrderResponse;
 import iuh.fit.order_service.dtos.response.ProductResponse;
 import iuh.fit.order_service.enums.OrderStatus;
 import iuh.fit.order_service.enums.PaymentType;
+import iuh.fit.order_service.events.BookingCreatedEvent;
 import iuh.fit.order_service.models.Order;
 import iuh.fit.order_service.models.OrderDetail;
 import iuh.fit.order_service.repositories.OrderRepository;
@@ -35,7 +34,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerFeignClient customerFeignClient;
     private final ProductFeignClient productFeignClient;
-    private final PaymentFeignClient paymentFeignClient;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
@@ -61,6 +60,7 @@ public class OrderService {
                     .productId(product.getId())
                     .quantity(qty)
                     .unitPrice(unitPrice)
+                    .seatNumber(line.getSeatNumber())
                     .build();
             order.getDetails().add(detail);
         }
@@ -68,18 +68,16 @@ public class OrderService {
         order.setTotalAmount(total);
         Order saved = orderRepository.save(order);
 
-        if (saved.getPaymentType() == PaymentType.BANK) {
-            try {
-                paymentFeignClient.processPayment(new PaymentTriggerRequest(
-                        request.getUserId(),
-                        saved.getId(),
-                        saved.getTotalAmount(),
-                        Boolean.TRUE));
-            } catch (FeignException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Không gọi được payment-service");
-            }
-            saved = orderRepository.findById(saved.getId()).orElseThrow();
-        }
+        // Publish BOOKING_CREATED event for all payment types
+        BookingCreatedEvent event = BookingCreatedEvent.builder()
+                .orderId(saved.getId())
+                .userId(saved.getUserId())
+                .totalAmount(saved.getTotalAmount())
+                .paymentType(saved.getPaymentType().name())
+                .createdAt(saved.getOrderDate())
+                .build();
+        eventPublisher.publishBookingCreated(event);
+        
         return toResponse(saved);
     }
 
@@ -150,7 +148,8 @@ public class OrderService {
                         d.getId(),
                         d.getProductId(),
                         d.getQuantity(),
-                        d.getUnitPrice()))
+                        d.getUnitPrice(),
+                        d.getSeatNumber()))
                 .collect(Collectors.toList());
 
         OrderResponse response = new OrderResponse();

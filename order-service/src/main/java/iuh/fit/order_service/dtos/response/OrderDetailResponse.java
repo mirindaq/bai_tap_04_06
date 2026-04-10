@@ -15,4 +15,5 @@ public class OrderDetailResponse {
     private Long productId;
     private Integer quantity;
     private double unitPrice;
+    private String seatNumber;
 }

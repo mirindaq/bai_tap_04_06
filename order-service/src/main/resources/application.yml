@@ -7,6 +7,12 @@ spring:
   application:
     name: order-service
 
+  rabbitmq:
+    host: 172.16.80.111
+    port: 5672
+    username: admin
+    password: admin123
+
   datasource:
     url: jdbc:mariadb://localhost:3307/order_db
     username: root

@@ -5,14 +5,19 @@ import iuh.fit.customer_service.dtos.request.RegisterRequest;
 import iuh.fit.customer_service.dtos.response.LoginResponse;
 import iuh.fit.customer_service.dtos.response.RegisterResponse;
 import iuh.fit.customer_service.entities.UserAccount;
+import iuh.fit.customer_service.events.UserRegisteredEvent;
 import iuh.fit.customer_service.exceptions.ConflictException;
 import iuh.fit.customer_service.exceptions.UnauthorizedException;
 import iuh.fit.customer_service.repositories.UserAccountRepository;
 import iuh.fit.customer_service.services.AuthService;
+import iuh.fit.customer_service.services.EventPublisher;
 import iuh.fit.customer_service.services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EventPublisher eventPublisher;
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
@@ -42,6 +48,17 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         UserAccount saved = userAccountRepository.save(user);
+        
+        // Publish USER_REGISTERED event
+        UserRegisteredEvent event = UserRegisteredEvent.builder()
+                .userId(saved.getId())
+                .username(saved.getUsername())
+                .email(saved.getEmail())
+                .fullName(saved.getFullName())
+                .registeredAt(LocalDateTime.ofInstant(saved.getCreatedAt(), ZoneId.systemDefault()))
+                .build();
+        eventPublisher.publishUserRegistered(event);
+        
         return RegisterResponse.builder()
                 .id(saved.getId())
                 .username(saved.getUsername())

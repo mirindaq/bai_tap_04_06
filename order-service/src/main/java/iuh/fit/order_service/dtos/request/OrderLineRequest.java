@@ -21,4 +21,6 @@ public class OrderLineRequest {
     @NotNull
     @Min(1)
     private Integer quantity;
+
+    private String seatNumber;
 }

@@ -40,4 +40,7 @@ public class OrderDetail {
 
     @Column(name = "unit_price", nullable = false)
     private double unitPrice;
+
+    @Column(name = "seat_number")
+    private String seatNumber;
 }
