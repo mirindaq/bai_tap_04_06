@@ -1,21 +1,26 @@
 package iuh.fit.payment_service.controllers;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import iuh.fit.payment_service.dtos.request.ProcessPaymentRequest;
+import iuh.fit.payment_service.dtos.response.PaymentResponse;
+import iuh.fit.payment_service.services.PaymentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-/**
- * PaymentController - Disabled in Event-Driven Architecture
- * Payment processing is now handled via RabbitMQ events (BookingEventListener)
- * This controller is kept for potential future direct API needs
- */
 @RestController
 @RequestMapping("/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 
-    // Payment processing is now event-driven via RabbitMQ
-    // See: BookingEventListener for BOOKING_CREATED event handling
-    
+    private final PaymentService paymentService;
+
+    @PostMapping
+    public ResponseEntity<PaymentResponse> processPayment(@Valid @RequestBody ProcessPaymentRequest request) {
+        return ResponseEntity.ok(paymentService.processPayment(request));
+    }
 }

@@ -2,6 +2,7 @@ iuh\fit\payment_service\dtos\request\ProcessPaymentRequest.class
 iuh\fit\payment_service\config\RabbitMQConfig.class
 iuh\fit\payment_service\events\BookingFailedEvent$BookingFailedEventBuilder.class
 iuh\fit\payment_service\dtos\request\UpdatePaymentStatusRequest.class
+iuh\fit\payment_service\dtos\response\PaymentResponse.class
 iuh\fit\payment_service\clients\OrderFeignClient.class
 iuh\fit\payment_service\events\BookingCreatedEvent.class
 iuh\fit\payment_service\events\PaymentCompletedEvent.class
