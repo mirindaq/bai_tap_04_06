@@ -43,6 +43,9 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-3">
+              <Link to="/register" className="rounded-full border border-[#2f6f4e]/20 bg-white/70 px-5 py-2 font-bold text-[#2f6f4e] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ecf5df]">
+                Dang ky
+              </Link>
               <Link to="/login" className="rounded-full bg-[#2f6f4e] px-5 py-2 font-bold text-white shadow-md shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-[#24583e]">
                 Dang nhap
               </Link>

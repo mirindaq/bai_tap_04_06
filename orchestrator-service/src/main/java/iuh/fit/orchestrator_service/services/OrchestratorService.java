@@ -16,12 +16,14 @@ import iuh.fit.orchestrator_service.dtos.request.CreateBookingRequest;
 import iuh.fit.orchestrator_service.dtos.request.LoginRequest;
 import iuh.fit.orchestrator_service.dtos.request.OrderLineRequest;
 import iuh.fit.orchestrator_service.dtos.request.ProcessPaymentRequest;
+import iuh.fit.orchestrator_service.dtos.request.RegisterRequest;
 import iuh.fit.orchestrator_service.dtos.response.ApiResponse;
 import iuh.fit.orchestrator_service.dtos.response.BookTourResponse;
 import iuh.fit.orchestrator_service.dtos.response.BookingResponse;
 import iuh.fit.orchestrator_service.dtos.response.CustomerResponse;
 import iuh.fit.orchestrator_service.dtos.response.LoginResponse;
 import iuh.fit.orchestrator_service.dtos.response.PaymentResponse;
+import iuh.fit.orchestrator_service.dtos.response.RegisterResponse;
 import iuh.fit.orchestrator_service.dtos.response.TourResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +39,14 @@ public class OrchestratorService {
     public ApiResponse<LoginResponse> login(LoginRequest request) {
         try {
             return userClient.login(request);
+        } catch (FeignException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Khong goi duoc User Service");
+        }
+    }
+
+    public ApiResponse<RegisterResponse> register(RegisterRequest request) {
+        try {
+            return userClient.register(request);
         } catch (FeignException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Khong goi duoc User Service");
         }

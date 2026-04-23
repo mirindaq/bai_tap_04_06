@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../services/authApi';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -72,6 +72,12 @@ const Login = () => {
             {isSubmitting ? 'Dang dang nhap...' : 'Dang nhap'}
           </button>
         </form>
+        <p className="mt-5 text-center text-sm font-semibold text-[#7a5b42]">
+          Chua co tai khoan?{' '}
+          <Link to="/register" className="font-black text-[#2f6f4e] hover:text-[#24583e]">
+            Dang ky ngay
+          </Link>
+        </p>
         </div>
       </div>
     </div>
