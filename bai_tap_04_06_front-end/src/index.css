@@ -1,13 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  font-family: "Sora", "Trebuchet MS", "Segoe UI", sans-serif;
-  color: #1e293b;
-  background-color: #e0f2fe;
+  font-family: "Fraunces", "Nunito", "Trebuchet MS", sans-serif;
+  color: #2f241d;
+  background: #fff7e8;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #e0f2fe;
+  background:
+    radial-gradient(circle at top left, rgba(255, 180, 96, 0.38), transparent 32rem),
+    radial-gradient(circle at 85% 10%, rgba(35, 134, 97, 0.2), transparent 28rem),
+    linear-gradient(135deg, #fff7e8 0%, #f6e7ca 45%, #eaf4dc 100%);
+}
+
+button,
+a,
+input {
+  font-family: inherit;
 }

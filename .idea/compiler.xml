@@ -11,6 +11,7 @@
         <module name="discovery" />
         <module name="api-gateway" />
         <module name="product-service" />
+        <module name="orchestrator-service" />
         <module name="order-service" />
         <module name="notification-service" />
       </profile>
@@ -25,6 +26,7 @@
       <module name="customer-service" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="notification-service" options="-parameters" />
+      <module name="orchestrator-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="product-service" options="-parameters" />

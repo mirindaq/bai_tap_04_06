@@ -39,15 +39,13 @@ const Home = () => {
       setError('');
       try {
         const data = await tourApi.getAll();
-        if (cancelled) {
-          return;
+        if (!cancelled) {
+          setTours(Array.isArray(data) ? data : []);
         }
-        setTours(Array.isArray(data) ? data : []);
       } catch (err) {
-        if (cancelled) {
-          return;
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Khong tai duoc danh sach tour.');
         }
-        setError(err instanceof Error ? err.message : 'Khong tai duoc danh sach tour.');
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -56,7 +54,6 @@ const Home = () => {
     };
 
     void loadTours();
-
     return () => {
       cancelled = true;
     };
@@ -115,42 +112,46 @@ const Home = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <header className="mb-10 rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-100 via-sky-50 to-indigo-100 p-6 shadow-lg">
-        <h1 className="border-l-4 border-blue-500 pl-4 text-3xl font-black text-slate-800">
-          Tour du lich hien co
-        </h1>
-        <p className="mt-2 italic text-slate-600">Chon tour, nhap so khach va de Orchestrator xu ly booking.</p>
+    <div className="mx-auto max-w-6xl p-6">
+      <header className="mb-10 overflow-hidden rounded-[2rem] border border-white/70 bg-[#2f6f4e] p-8 text-white shadow-[0_25px_70px_rgba(47,111,78,0.25)]">
+        <p className="mb-3 text-xs font-black uppercase tracking-[0.35em] text-[#ffd28a]">Orchestrated travel</p>
+        <h1 className="max-w-2xl text-4xl font-black leading-tight md:text-5xl">Tour du lich hien co</h1>
+        <p className="mt-4 max-w-2xl text-white/80">
+          Chon tour, nhap so khach va de Orchestrator xu ly User, Tour, Booking, Payment.
+        </p>
       </header>
 
-      {isLoading ? <p className="text-slate-600">Dang tai lich chieu...</p> : null}
-      {error ? <p className="mb-4 rounded-lg bg-rose-100 px-4 py-3 text-rose-600">{error}</p> : null}
+      {isLoading ? <p className="rounded-2xl bg-white/70 px-5 py-4 font-bold text-[#7a5b42] shadow-sm">Dang tai danh sach tour...</p> : null}
+      {error ? <p className="mb-4 rounded-2xl bg-[#ffe5db] px-5 py-4 font-semibold text-[#c2412d]">{error}</p> : null}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {tours.map((tour) => {
           const displayName = tour?.name || `Tour #${tour?.id ?? ''}`;
           const displayPrice = Number(tour?.price ?? 0);
           const tourKey = String(tour?.id ?? `tour-${displayName}`);
-          const imageUrl =
-            tour?.image || tour?.imageUrl || randomImagesByTour[tourKey] || FALLBACK_IMAGE;
+          const imageUrl = tour?.image || tour?.imageUrl || randomImagesByTour[tourKey] || FALLBACK_IMAGE;
 
           return (
             <div
               key={tour.id}
               onClick={() => openTourDetail(tour)}
-              className="cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-200/60"
+              className="group cursor-pointer overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/80 shadow-[0_18px_45px_rgba(88,58,24,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(88,58,24,0.18)]"
             >
-              <img src={imageUrl} alt={displayName} className="h-56 w-full object-cover" />
-              <div className="p-4">
-                <h3 className="mb-1 text-lg font-bold text-slate-800">{displayName}</h3>
-                <p className="mb-2 text-xl font-extrabold text-blue-700">{displayPrice.toLocaleString()}d / khach</p>
-                <p className="mb-4 text-sm text-slate-500">Con lai: {tour?.stock ?? 'N/A'} cho</p>
+              <div className="relative">
+                <img src={imageUrl} alt={displayName} className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute right-3 top-3 rounded-full bg-[#fff8ea]/90 px-3 py-1 text-xs font-black text-[#2f6f4e] shadow">
+                  {tour?.stock ?? 'N/A'} cho
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="mb-2 text-xl font-black text-[#2f241d]">{displayName}</h3>
+                <p className="mb-4 text-2xl font-black text-[#e75f35]">{displayPrice.toLocaleString()}d / khach</p>
                 <button
                   onClick={(event) => {
                     event.stopPropagation();
                     openTourDetail(tour);
                   }}
-                  className="mb-2 w-full rounded-lg border border-slate-200 bg-slate-100 py-2 font-semibold text-slate-700 transition hover:bg-slate-200"
+                  className="mb-2 w-full rounded-2xl border border-[#2f6f4e]/20 bg-[#ecf5df] py-2.5 font-black text-[#2f6f4e] transition hover:bg-[#dcebc9]"
                 >
                   Xem thong tin
                 </button>
@@ -159,7 +160,7 @@ const Home = () => {
                     event.stopPropagation();
                     openTourDetail(tour);
                   }}
-                  className="w-full rounded-lg border border-blue-300 bg-blue-50 py-2 font-semibold text-blue-700 transition hover:bg-blue-500 hover:text-white"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#ff8a3d] to-[#e75f35] py-2.5 font-black text-white shadow-lg shadow-orange-900/15 transition hover:-translate-y-0.5"
                 >
                   Dat tour
                 </button>
@@ -169,48 +170,39 @@ const Home = () => {
         })}
 
         {!isLoading && !error && tours.length === 0 ? (
-          <div className="col-span-full rounded-lg border border-slate-200 bg-white p-5 text-slate-600 shadow-sm">
+          <div className="col-span-full rounded-2xl border border-white/70 bg-white/80 p-6 text-[#7a5b42] shadow-sm">
             Chua co tour nao tu API.
           </div>
         ) : null}
       </div>
 
       {selectedTour ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 p-4"
-          onClick={closeTourDetail}
-        >
-          <div className="w-full max-w-3xl rounded-xl border border-slate-200 bg-white p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-            <h2 className="mb-2 text-2xl font-bold text-slate-800">
-              {selectedTour?.name || `Tour #${selectedTour?.id ?? ''}`}
-            </h2>
-            <p className="mb-3 font-bold text-blue-700">
-              {Number(selectedTour?.price ?? 0).toLocaleString()}d / khach
-            </p>
-            <p className="mb-2 text-sm text-slate-500">Ma tour: {selectedTour?.id ?? 'N/A'}</p>
-            <p className="mb-4 text-slate-600">
-              {selectedTour?.description || 'Tour hien chua co mo ta.'}
-            </p>
-            <div className="mb-4 rounded-lg border border-blue-100 bg-sky-50 p-4">
-              <label className="mb-2 block text-sm font-semibold text-slate-700">So khach</label>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2f241d]/45 p-4 backdrop-blur-sm" onClick={closeTourDetail}>
+          <div className="w-full max-w-3xl rounded-[2rem] border border-white/70 bg-[#fffaf0] p-6 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+            <h2 className="mb-2 text-3xl font-black text-[#2f241d]">{selectedTour?.name || `Tour #${selectedTour?.id ?? ''}`}</h2>
+            <p className="mb-3 text-xl font-black text-[#e75f35]">{Number(selectedTour?.price ?? 0).toLocaleString()}d / khach</p>
+            <p className="mb-2 text-sm font-bold text-[#9b7a5b]">Ma tour: {selectedTour?.id ?? 'N/A'}</p>
+            <p className="mb-4 text-[#6b5542]">{selectedTour?.description || 'Tour hien chua co mo ta.'}</p>
+            <div className="mb-4 rounded-[1.5rem] border border-[#2f6f4e]/10 bg-[#ecf5df] p-5">
+              <label className="mb-2 block text-sm font-black text-[#2f6f4e]">So khach</label>
               <input
                 type="number"
                 min="1"
                 value={travelerCount}
                 onChange={(event) => setTravelerCount(event.target.value)}
-                className="mb-4 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-700 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                className="mb-4 w-full rounded-2xl border border-[#2f6f4e]/10 bg-white px-4 py-3 text-[#4b382d] outline-none focus:border-[#2f6f4e] focus:ring-4 focus:ring-[#2f6f4e]/15"
               />
-              <label className="mb-2 block text-sm font-semibold text-slate-700">Ghi chu booking</label>
+              <label className="mb-2 block text-sm font-black text-[#2f6f4e]">Ghi chu booking</label>
               <input
                 type="text"
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
                 placeholder="VD: phong don, diem don, yeu cau them..."
-                className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-700 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                className="w-full rounded-2xl border border-[#2f6f4e]/10 bg-white px-4 py-3 text-[#4b382d] outline-none focus:border-[#2f6f4e] focus:ring-4 focus:ring-[#2f6f4e]/15"
               />
-              <div className="mt-4 rounded-lg bg-white p-3 text-sm text-slate-700">
+              <div className="mt-4 rounded-2xl bg-white p-4 text-sm font-bold text-[#4b382d]">
                 Tam tinh:{' '}
-                <span className="font-bold text-blue-700">
+                <span className="font-black text-[#e75f35]">
                   {(Number(selectedTour?.price ?? 0) * Math.max(1, Number(travelerCount) || 1)).toLocaleString()}d
                 </span>
               </div>
@@ -218,13 +210,13 @@ const Home = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleConfirmTour}
-                className="flex-1 rounded-lg border border-blue-300 bg-blue-50 py-2 font-semibold text-blue-700 transition hover:bg-blue-500 hover:text-white"
+                className="flex-1 rounded-2xl bg-gradient-to-r from-[#ff8a3d] to-[#e75f35] py-3 font-black text-white shadow-lg shadow-orange-900/15 transition hover:-translate-y-0.5"
               >
                 Tiep tuc dat tour
               </button>
               <button
                 onClick={closeTourDetail}
-                className="flex-1 rounded-lg border border-slate-300 bg-white py-2 font-semibold text-slate-700 transition hover:bg-slate-100"
+                className="flex-1 rounded-2xl border border-[#2f6f4e]/20 bg-white py-3 font-black text-[#2f6f4e] transition hover:bg-[#ecf5df]"
               >
                 Dong
               </button>

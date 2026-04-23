@@ -33,41 +33,46 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 p-6">
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
-        <h2 className="mb-2 text-center text-2xl font-black text-blue-700">Dang nhap UniTour</h2>
-        <p className="mb-6 text-center text-sm text-slate-600">Dat tour qua Orchestrator trong vai cham.</p>
+    <div className="flex min-h-[calc(100vh-72px)] items-center justify-center p-6">
+      <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_rgba(88,58,24,0.18)] backdrop-blur">
+        <div className="absolute -right-20 -top-20 h-44 w-44 rounded-full bg-[#ff8a3d]/25" />
+        <div className="absolute -bottom-16 -left-16 h-36 w-36 rounded-full bg-[#2f6f4e]/20" />
+        <div className="relative">
+        <p className="mb-3 text-center text-xs font-black uppercase tracking-[0.28em] text-[#e75f35]">Travel desk</p>
+        <h2 className="mb-2 text-center text-3xl font-black text-[#2f241d]">Dang nhap UniTour</h2>
+        <p className="mb-7 text-center text-sm text-[#7a5b42]">Dat tour qua Orchestrator trong vai cham.</p>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-slate-700">Email/Ten dang nhap</label>
+            <label className="mb-1 block font-bold text-[#4b382d]">Email/Ten dang nhap</label>
             <input
               type="text"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-2xl border border-amber-900/10 bg-[#fff8ea] px-4 py-3 text-[#4b382d] outline-none transition focus:border-[#2f6f4e] focus:ring-4 focus:ring-[#2f6f4e]/15"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
               required
             />
           </div>
           <div>
-            <label className="block text-slate-700">Mat khau</label>
+            <label className="mb-1 block font-bold text-[#4b382d]">Mat khau</label>
             <input
               type="password"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="w-full rounded-2xl border border-amber-900/10 bg-[#fff8ea] px-4 py-3 text-[#4b382d] outline-none transition focus:border-[#2f6f4e] focus:ring-4 focus:ring-[#2f6f4e]/15"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           {error ? (
-            <p className="text-sm text-rose-400">{error}</p>
+            <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-[#c2412d]">{error}</p>
           ) : null}
           <button
-            className="w-full rounded-lg bg-blue-600 py-2 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-2xl bg-gradient-to-r from-[#ff8a3d] to-[#e75f35] py-3 font-black text-white shadow-lg shadow-orange-900/20 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Dang dang nhap...' : 'Dang nhap'}
           </button>
         </form>
+        </div>
       </div>
     </div>
   );

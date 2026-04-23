@@ -5,9 +5,11 @@ import iuh.fit.notification_service.events.PaymentCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("rabbitmq")
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentEventListener {

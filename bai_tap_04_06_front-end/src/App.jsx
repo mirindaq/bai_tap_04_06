@@ -13,7 +13,7 @@ function App() {
         <Router>
           <Navbar />
 
-          <div className="min-h-screen bg-gradient-to-b from-slate-50 via-sky-50 to-indigo-50">
+          <div className="min-h-screen bg-[radial-gradient(circle_at_15%_10%,rgba(255,173,88,0.35),transparent_28rem),radial-gradient(circle_at_85%_0%,rgba(35,134,97,0.18),transparent_26rem),linear-gradient(135deg,#fff8ea_0%,#f7e6c7_48%,#e9f3dd_100%)]">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
