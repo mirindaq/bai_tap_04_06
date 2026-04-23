@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /orchestrator-service
 
+  # Frontend calls Orchestrator directly, not through API Gateway.
+
 spring:
   application:
     name: orchestrator-service

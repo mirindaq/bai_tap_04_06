@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { authApi } from '../services/authApi';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -35,8 +35,8 @@ const Login = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 p-6">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
-        <h2 className="mb-2 text-center text-2xl font-black text-blue-700">Dang nhap UniCinema</h2>
-        <p className="mb-6 text-center text-sm text-slate-600">Mo phong ve phim trong vai cham.</p>
+        <h2 className="mb-2 text-center text-2xl font-black text-blue-700">Dang nhap UniTour</h2>
+        <p className="mb-6 text-center text-sm text-slate-600">Dat tour qua Orchestrator trong vai cham.</p>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-slate-700">Email/Ten dang nhap</label>
@@ -68,9 +68,6 @@ const Login = () => {
             {isSubmitting ? 'Dang dang nhap...' : 'Dang nhap'}
           </button>
         </form>
-        <p className="mt-4 text-center text-slate-600">
-          Chua co tai khoan? <Link to="/register" className="font-semibold text-blue-700">Dang ky ngay</Link>
-        </p>
       </div>
     </div>
   );

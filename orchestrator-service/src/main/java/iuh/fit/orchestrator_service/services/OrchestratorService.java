@@ -13,11 +13,14 @@ import iuh.fit.orchestrator_service.clients.TourClient;
 import iuh.fit.orchestrator_service.clients.UserClient;
 import iuh.fit.orchestrator_service.dtos.request.BookTourRequest;
 import iuh.fit.orchestrator_service.dtos.request.CreateBookingRequest;
+import iuh.fit.orchestrator_service.dtos.request.LoginRequest;
 import iuh.fit.orchestrator_service.dtos.request.OrderLineRequest;
 import iuh.fit.orchestrator_service.dtos.request.ProcessPaymentRequest;
+import iuh.fit.orchestrator_service.dtos.response.ApiResponse;
 import iuh.fit.orchestrator_service.dtos.response.BookTourResponse;
 import iuh.fit.orchestrator_service.dtos.response.BookingResponse;
 import iuh.fit.orchestrator_service.dtos.response.CustomerResponse;
+import iuh.fit.orchestrator_service.dtos.response.LoginResponse;
 import iuh.fit.orchestrator_service.dtos.response.PaymentResponse;
 import iuh.fit.orchestrator_service.dtos.response.TourResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,22 @@ public class OrchestratorService {
     private final TourClient tourClient;
     private final BookingClient bookingClient;
     private final PaymentClient paymentClient;
+
+    public ApiResponse<LoginResponse> login(LoginRequest request) {
+        try {
+            return userClient.login(request);
+        } catch (FeignException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Khong goi duoc User Service");
+        }
+    }
+
+    public List<TourResponse> getTours() {
+        try {
+            return tourClient.getTours();
+        } catch (FeignException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Khong goi duoc Tour Service");
+        }
+    }
 
     public BookTourResponse bookTour(BookTourRequest request) {
         CustomerResponse user = callUserService(request.getUserId());

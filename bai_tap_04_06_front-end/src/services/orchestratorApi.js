@@ -1,4 +1,4 @@
-import { API_BASE_URL, PRODUCT_API_PREFIX } from '../constants/api';
+import { API_BASE_URL, ORCHESTRATOR_API_PREFIX } from '../constants/api';
 
 const parseErrorMessage = async (response) => {
   try {
@@ -17,13 +17,15 @@ const buildAuthHeaders = () => {
   return { Authorization: `Bearer ${token}` };
 };
 
-export const productApi = {
-  async getAll() {
-    const response = await fetch(`${API_BASE_URL}${PRODUCT_API_PREFIX}`, {
-      method: 'GET',
+export const orchestratorApi = {
+  async bookTour(payload) {
+    const response = await fetch(`${API_BASE_URL}${ORCHESTRATOR_API_PREFIX}/book-tour`, {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         ...buildAuthHeaders(),
       },
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -33,4 +35,3 @@ export const productApi = {
     return response.json();
   },
 };
-
